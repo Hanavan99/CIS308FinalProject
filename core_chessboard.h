@@ -1,3 +1,6 @@
+#ifndef __core_chessboard_h__
+#define __core_chessboard_h__
+
 typedef enum {
     BLACK,
     WHITE
@@ -25,3 +28,5 @@ typedef struct {
     tile_t tiles[8][8];
     piece_t pieces[8][8];
 } board_t;
+
+#endif
