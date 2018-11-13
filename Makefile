@@ -1,12 +1,14 @@
 CC = gcc
-src = $(wildcard *.c)
-obj = $(src:.c=.o)
-
-client:
-	$(CC) -o client $(obj) 
+serversrc = $(wildcard core_*.c server_*.c)
+clientsrc = $(wildcard core_*.c client_*.c)
+serverobj = $(serversrc:.c=.o)
+clientobj = $(clientsrc:.c=.o)
 
 server:
-	$(CC) -o server $(obj) 
+	$(CC) -o server $(serversrc)
+
+client:
+	$(CC) -o client $(clientsrc)
 
 clean:
-	rm -f $(obj) client server
+	rm -f server client
