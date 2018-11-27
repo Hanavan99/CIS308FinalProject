@@ -7,8 +7,8 @@ typedef enum {
 } team_t;
 
 typedef enum {
-    BLACK,
-    WHITE
+    BLACK_TILE,
+    WHITE_TILE
 } tile_t;
 
 typedef struct {
