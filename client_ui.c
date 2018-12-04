@@ -47,8 +47,3 @@ void displayBoard(){
 
 printf("\u2654");
 }
-
-int client_ui_main(int argc, char * argv){
-    displayBoard();
-    return 0;
-}
