@@ -1,10 +1,12 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
+#include"core_chessboard.h"
+#include"client_ui.h"
 
 char input[6];
 char source_move[3];
 char target_move[3];
-
 
 void get_move(){
     printf("%s", "Enter moves in the format: \"e2,e4\" (no spaces)\n");
@@ -28,12 +30,12 @@ void tokenize_moves(){
     strcpy(target_move, moves[1]);
 }
 
-void displayBoard(){
+void display_board(){
 //    chessboard_t * board = malloc(sizeof(chessboard_t));
 //    core_read_board(board);
 
      chessboard_t * board = malloc(sizeof(chessboard_t));
-     board->pieces[0][0] = 
+     board->pieces[0][0] = chess_create_piece(KING, BLACK);
 
     for(int y = 0; y < 9; y++){
 	for(int x = 0; x < 9; x++){
@@ -45,13 +47,15 @@ void displayBoard(){
 		printf("%d|", y);
 	    }
 	    else{
-		printf("_|");
+		if(board->pieces[x-1][y-1].type == KING){
+		//printf("\u2654");
+		printf("K");
+}
 	    }
 	}//end x for
 	printf("\n");
     }
 
-printf("\u2654");
 
 //get_move();
 }

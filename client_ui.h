@@ -3,8 +3,8 @@
 
 int client_ui_main(int argc, const char * argv[]);
 
-void getMove();
-void tokenizeMoves();
-void displayBoard();
+void get_move();
+void tokenize_moves();
+void display_board();
 
 #endif /* client_ui.h */
