@@ -10,6 +10,7 @@ void get_move(){
     printf("%s", "Enter moves in the format: \"e2,e4\" (no spaces)\n");
     printf("%s", "Enter your move: \n");
     scanf("%s\n", input);
+    tokenize_moves();
 }
 
 void tokenize_moves(){
@@ -28,7 +29,12 @@ void tokenize_moves(){
 }
 
 void displayBoard(){
-    //getBoard
+//    chessboard_t * board = malloc(sizeof(chessboard_t));
+//    core_read_board(board);
+
+     chessboard_t * board = malloc(sizeof(chessboard_t));
+     board->pieces[0][0] = 
+
     for(int y = 0; y < 9; y++){
 	for(int x = 0; x < 9; x++){
 	    if(y == 0){
@@ -46,4 +52,6 @@ void displayBoard(){
     }
 
 printf("\u2654");
+
+//get_move();
 }
