@@ -12,6 +12,13 @@ int chess_to_file_index(int file) {
     return file - 1;
 }
 
-int chess_get_tile_color(int rank, int file) {
+color_t chess_get_tile_color(int rank, int file) {
     return (rank + file) % 2 == 0 ? WHITE : BLACK;
+}
+
+piece_t chess_create_piece(type_t type, color_t color) {
+    piece_t piece;
+    piece.type = type;
+    piece.color = color;
+    return piece;
 }
