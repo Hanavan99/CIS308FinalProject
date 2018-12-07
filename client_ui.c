@@ -12,19 +12,23 @@ void get_move(){
     int flag = 0;
 
     do{
-        printf("Enter the coordinates \"e2\" of the piece you would like to move: ");
+        printf("Enter the coordinates (\"e2\") of the piece you would like to move: ");
         scanf("%s", input);
         printf("\n");
-        flag = check_move(input);
+        flag = check_move(input, source_move);
     } while(flag == 0);
+    flag = 0;
 
-    printf("Enter the coordinates \"e2\" of the location you would like to move your piece to: ");
+    do{
+    printf("Enter the coordinates (\"e2\") of the location you would like to move your piece to: ");
     scanf("%s", input);
     printf("\n");
-    tokenize_move(input, target_move);
+    flag = check_move(input, target_move);
+    } while(flag == 0);
 }
 
-int check_move(char input []){
+int check_move(char input [], char output []){
+
     switch(input[0]){
     	case 'a':
 	case 'b':
@@ -34,10 +38,9 @@ int check_move(char input []){
 	case 'f':
 	case 'g':
 	case 'h':
-	return 1;
 	break;
 	default:
-	printf("letter coordinate invalid\n");
+	printf("Invalid input\n\n");
 	return 0;
     }
 
@@ -50,35 +53,19 @@ int check_move(char input []){
 	case '6':
 	case '7':
 	case '8':
-	return 1;
 	break;
 	default:
-	printf("number coordinate invalid\n");
+	printf("Invalid input\n\n");
 	return 0;
     }
-}
 
-void tokenize_move(){
-    char * parts = strtok(input, ",");
-    char * moves[2];
-    int i = 0;
-
-    while(parts != NULL){
-	moves[i] = parts;
-	parts = strtok(NULL, ",");
-	i++;
-    }
-
-    strcpy(source_move, moves[0]);
-    strcpy(target_move, moves[1]);
+    strcpy(output, input);
+    return 1;
 }
 
 void display_board(){
 //    chessboard_t * board = malloc(sizeof(chessboard_t));
 //    core_read_board(board);
-
-    chessboard_t * board = malloc(sizeof(chessboard_t));
-    board->pieces[0][0] = chess_create_piece(BLACK, KING);
 
     printf("\033[40m\033[37m");
     printf("_|a b c d e f g h\n");
