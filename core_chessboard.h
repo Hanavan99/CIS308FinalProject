@@ -28,7 +28,7 @@ typedef struct {
     piece_t pieces[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
 } chessboard_t;
 
-chessboard_t * chess_create_default_chessboard();
+//chessboard_t * chess_create_default_chessboard();
 void chess_move_piece(chessboard_t *, int, int, int, int);
 piece_t chess_get_piece_at(chessboard_t *, int, int);
 int chess_to_rank_index(int);
@@ -66,6 +66,6 @@ const piece_t white_bishop;
 const piece_t white_queen;
 const piece_t white_king;
 
-const piece_t[CHESSBOARD_SIZE][CHESSBOARD_SIZE] default_chessboard;
+//const piece_t[CHESSBOARD_SIZE][CHESSBOARD_SIZE] default_chessboard;
 
 #endif

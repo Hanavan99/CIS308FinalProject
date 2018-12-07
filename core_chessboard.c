@@ -1,7 +1,7 @@
 #include "core_chessboard.h"
 #include <stdlib.h>
 
-const piece_t black_pawn = chess_create_piece(PAWN, BLACK);
+/*const piece_t black_pawn = chess_create_piece(PAWN, BLACK);
 const piece_t black_rook = chess_create_piece(ROOK, BLACK);
 const piece_t black_knight = chess_create_piece(KNIGHT, BLACK);
 const piece_t black_bishop = chess_create_piece(BISHOP, BLACK);
@@ -30,7 +30,7 @@ chessboard_t * chess_create_default_chessboard() {
 	board->turncolor = WHITE;
 	board->pieces = default_chessboard;
 	return board;
-}
+}*/
 
 void chess_move_piece(chessboard_t * board, int fromrank, int fromfile, int torank, int tofile) {
     // TODO implement

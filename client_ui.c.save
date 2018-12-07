@@ -9,53 +9,15 @@ char source_move[3];
 char target_move[3];
 
 void get_move(){
-    int flag = 0;
-
-    do{
-        printf("Enter the coordinates \"e2\" of the piece you would like to move: ");
-        scanf("%s", input);
-        printf("\n");
-        flag = check_move(input);
-    } while(flag == 0);
-
+    do
+    printf("Enter the coordinates \"e2\" of the piece you would like to move: ");
+    scanf("%s", input);
+    printf("\n");
+    tokenize_move(input, source_move);
     printf("Enter the coordinates \"e2\" of the location you would like to move your piece to: ");
     scanf("%s", input);
     printf("\n");
     tokenize_move(input, target_move);
-}
-
-int check_move(char input []){
-    switch(input[0]){
-    	case 'a':
-	case 'b':
-  	case 'c':
-  	case 'd':
-	case 'e':
-	case 'f':
-	case 'g':
-	case 'h':
-	return 1;
-	break;
-	default:
-	printf("letter coordinate invalid\n");
-	return 0;
-    }
-
-    switch(input[1]){
-	case '1':
-	case '2':
-	case '3':
-	case '4':
-	case '5':
-	case '6':
-	case '7':
-	case '8':
-	return 1;
-	break;
-	default:
-	printf("number coordinate invalid\n");
-	return 0;
-    }
 }
 
 void tokenize_move(){
