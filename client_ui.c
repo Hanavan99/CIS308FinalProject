@@ -82,9 +82,13 @@ void display_board(){
 		else{
 		    printf("\033[44m");
 		}
-		switch(board->pieces[x-1][y-1]->type){
+
+		piece_t * piece = board->pieces[8-y][x-1];
+		if(piece == NULL) { printf("  "); continue; }
+
+		switch(piece->type){
 		    case KING:
-		    if(board->pieces[x-1][y-1]->color == WHITE){
+		    if(piece->color == WHITE){
 		        printf("\u2654 ");
 		    }
 		    else{
@@ -94,7 +98,7 @@ void display_board(){
 		    break;
 
 		    case QUEEN:
-		    if(board->pieces[x-1][y-1]->color == WHITE){
+		    if(piece->color == WHITE){
 			printf("\u2655 ");
 		    }
 		    else{
@@ -104,7 +108,7 @@ void display_board(){
 		    break;
 
 		    case ROOK:
-		    if(board->pieces[x-1][y-1]->color == WHITE){
+		    if(piece->color == WHITE){
 		    	printf("\u2656 ");
 		    }
 		    else {
@@ -114,17 +118,17 @@ void display_board(){
 		    break;
 
 		    case BISHOP:
-		    if(board->pieces[x-1][y-1]->color == WHITE){
+		    if(piece->color == WHITE){
 			printf("\u2657 ");
 		    }
 		    else{
-			printf("\u2657D ");
+			printf("\u265D ");
 		    }
 		    //printf("N ");
 		    break;
 
 		    case KNIGHT:
-		    if(board->pieces[x-1][y-1]->color == WHITE){
+		    if(piece->color == WHITE){
 			printf("\u2658 ");
 		    }
 		    else{
@@ -134,7 +138,7 @@ void display_board(){
 		    break;
 
 		    case PAWN:
-		    if(board->pieces[x-1][y-1]->color == WHITE){
+		    if(piece->color == WHITE){
 			printf("\u2659 ");
 		    }
 		    else{
