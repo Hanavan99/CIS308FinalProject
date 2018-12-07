@@ -64,8 +64,7 @@ int check_move(char input [], char output []){
 }
 
 void display_board(){
-//    chessboard_t * board = malloc(sizeof(chessboard_t));
-//    core_read_board(board);
+    chessboard_t * board = chess_create_default_chessboard();
 
     printf("\033[40m\033[37m");
     printf("_|a b c d e f g h\n");
@@ -83,9 +82,9 @@ void display_board(){
 		else{
 		    printf("\033[44m");
 		}
-		switch(board->pieces[x-1][y-1].type){
+		switch(board->pieces[x-1][y-1]->type){
 		    case KING:
-		    if(board->pieces[x-1][y-1].color == WHITE){
+		    if(board->pieces[x-1][y-1]->color == WHITE){
 		        printf("\u2654 ");
 		    }
 		    else{
@@ -95,7 +94,7 @@ void display_board(){
 		    break;
 
 		    case QUEEN:
-		    if(board->pieces[x-1][y-1].color == WHITE){
+		    if(board->pieces[x-1][y-1]->color == WHITE){
 			printf("\u2655 ");
 		    }
 		    else{
@@ -105,7 +104,7 @@ void display_board(){
 		    break;
 
 		    case ROOK:
-		    if(board->pieces[x-1][y-1].color == WHITE){
+		    if(board->pieces[x-1][y-1]->color == WHITE){
 		    	printf("\u2656 ");
 		    }
 		    else {
@@ -115,7 +114,7 @@ void display_board(){
 		    break;
 
 		    case BISHOP:
-		    if(board->pieces[x-1][y-1].color == WHITE){
+		    if(board->pieces[x-1][y-1]->color == WHITE){
 			printf("\u2657 ");
 		    }
 		    else{
@@ -125,7 +124,7 @@ void display_board(){
 		    break;
 
 		    case KNIGHT:
-		    if(board->pieces[x-1][y-1].color == WHITE){
+		    if(board->pieces[x-1][y-1]->color == WHITE){
 			printf("\u2658 ");
 		    }
 		    else{
@@ -135,7 +134,7 @@ void display_board(){
 		    break;
 
 		    case PAWN:
-		    if(board->pieces[x-1][y-1].color == WHITE){
+		    if(board->pieces[x-1][y-1]->color == WHITE){
 			printf("\u2659 ");
 		    }
 		    else{

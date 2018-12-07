@@ -41,7 +41,7 @@ typedef struct {
     piece_t * pieces[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
 } chessboard_t;
 
-//chessboard_t * chess_create_default_chessboard();
+chessboard_t * chess_create_default_chessboard();
 void chess_move_piece(chessboard_t *, int, int, int, int);
 piece_t * chess_get_piece_at(chessboard_t *, int, int);
 int chess_to_rank_index(int);
@@ -65,24 +65,5 @@ int queen_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t 
 int queen_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
 int king_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
 int king_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
-
-<<<<<<< HEAD
-piece_t default_chessboard[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
-=======
-const piece_t black_pawn;
-const piece_t black_rook;
-const piece_t black_knight;
-const piece_t black_bishop;
-const piece_t black_queen;
-const piece_t black_king;
-const piece_t white_pawn;
-const piece_t white_rook;
-const piece_t white_knight;
-const piece_t white_bishop;
-const piece_t white_queen;
-const piece_t white_king;
-
-//const piece_t[CHESSBOARD_SIZE][CHESSBOARD_SIZE] default_chessboard;
->>>>>>> bf9df00b5525a3faaf1ab084d80644af4e4a309b
 
 #endif
