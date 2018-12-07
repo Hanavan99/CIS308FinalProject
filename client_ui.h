@@ -4,7 +4,7 @@
 int client_ui_main(int argc, const char * argv[]);
 
 void get_move();
-void tokenize_moves();
+int check_move(char [], char []);
 void display_board();
 
 #endif /* client_ui.h */
