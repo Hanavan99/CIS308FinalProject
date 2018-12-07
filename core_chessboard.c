@@ -15,7 +15,7 @@ chessboard_t * chess_create_default_chessboard() {
 	{ WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN },
 	{ WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK }
 	};
-	memcpy(board->pieces, pieces, CHESSBOARD_SIZE * CHESSBOARD_SIZE);
+	memcpy(board->pieces, pieces, CHESSBOARD_SIZE * CHESSBOARD_SIZE * sizeof(piece_t));
 	return board;
 }
 
