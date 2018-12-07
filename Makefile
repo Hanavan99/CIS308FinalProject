@@ -1,4 +1,4 @@
-CC = gcc
+CC = gcc -std=c99
 serversrc = $(wildcard core_*.c server_*.c)
 clientsrc = $(wildcard core_*.c client_*.c)
 serverobj = $(serversrc:.c=.o)
