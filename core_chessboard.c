@@ -19,8 +19,13 @@ chessboard_t * chess_create_default_chessboard() {
 	return board;
 }
 
-void chess_move_piece(chessboard_t * board, int fromrank, int fromfile, int torank, int tofile) {
-    // TODO implement
+void chess_move_piece(int fromRank, int fromFile, int toRank, int toFile, chessboard_t * board) {
+	piece_t * fromPiece = chess_get_piece_at(fromRank, fromFile, board);
+	if (fromPiece != NULL && chess_can_piece_move_to(fromRank, fromFile, toRank, toFile, board)) {
+		board->pieces[chess_to_rank_index(toRank)][chess_to_file_index(toFile)] = fromPiece;
+		board->pieces[chess_to_rank_index(fromRank)][chess_to_file_index(fromFile)] = NULL;
+		board->turncolor = board->turncolor == WHITE ? BLACK : WHITE;
+	}
 }
 
 int chess_to_rank_index(int rank) {
@@ -29,6 +34,10 @@ int chess_to_rank_index(int rank) {
 
 int chess_to_file_index(int file) {
     return file - 1;
+}
+
+piece_t * chess_get_piece_at(int rank, int file, chessboard_t * board) {
+	return board->pieces[chess_to_rank_index(rank)][chess_to_file_index(file)];
 }
 
 color_t chess_get_tile_color(int rank, int file) {
@@ -42,118 +51,181 @@ piece_t * chess_create_piece(type_t type, color_t color) {
     return piece;
 }
 
-int is_valid_move(piece_t fromPiece, int fromRank, int fromFile, piece_t toPiece, int toRank, int toFile, chessboard_t * board) {
+int is_piece_blocking(piece_t * fromPiece, piece_t * piece, int end) {
+	if (piece == NULL) {
+		return 0;
+	} else {
+		return end ? (fromPiece->color == piece->color) : 1;
+	}
+}
+
+int move_up(int pos[]) {
+	pos[1]++;
+}
+
+int move_down(int pos[]) {
+	pos[1]--;
+}
+
+int move_left(int pos[]) {
+	pos[0]--;
+}
+
+int move_right(int pos[]) {
+	pos[0]++;
+}
+
+int is_valid_board_position(int rank, int file) {
+	return rank >= 1 && rank <= CHESSBOARD_SIZE && file >= 1 && file <= CHESSBOARD_SIZE;
+}
+
+int chess_can_piece_move_to(int fromRank, int fromFile, int toRank, int toFile, chessboard_t * board) {
+	piece_t * fromPiece = chess_get_piece_at(fromRank, fromFile, board);
+	piece_t * toPiece = chess_get_piece_at(fromRank, fromFile, board);
+	int firstMove = 1; // TODO make a function for this
+
+	int validMove = 0;
+	switch (fromPiece->type) {
+	case PAWN:
+		validMove = pawn_is_valid_move(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, firstMove, board);
+		break;
+	case ROOK:
+		validMove = rook_is_valid_move(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, firstMove, board);
+		break;
+	case KNIGHT:
+		validMove = knight_is_valid_move(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, firstMove, board);
+		break;
+	case BISHOP:
+		validMove = bishop_is_valid_move(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, firstMove, board);
+		break;
+	case QUEEN:
+		validMove = queen_is_valid_move(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, firstMove, board);
+		break;
+	case KING:
+		validMove = king_is_valid_move(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, firstMove, board);
+		break;
+	}
+
+	int blocked;
+	switch (fromPiece->type) {
+	case PAWN:
+		blocked = pawn_is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+		break;
+	case ROOK:
+		blocked = rook_is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+		break;
+	case KNIGHT:
+		blocked = knight_is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+		break;
+	case BISHOP:
+		blocked = bishop_is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+		break;
+	case QUEEN:
+		blocked = queen_is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+		break;
+	case KING:
+		blocked = king_is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+		break;
+	}
+	return !blocked && validMove;
+}
+
+int is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
 
 	// check if the piece is moving vertically
-		if (fromFile == toFile) {
+	if (fromFile == toFile) {
 
-			// check if the piece is moving nowhere
-			if (fromRank == toRank) {
-				return true;
+		// check if the piece is moving nowhere
+		if (fromRank == toRank) {
+			return 1;
+		}
+
+		if (toRank > fromRank) {
+			for (int i = fromRank + 1; i <= toRank; i++) {
+				if (is_piece_blocking(fromPiece, chess_get_piece_at(i, fromFile, board), i == toRank)) {
+					return 1;
+				}
 			}
-
-			if (toRank > fromRank) {
-				for (int i = fromRank + 1; i <= toRank; i++) {
-					if (isPieceBlocking(fromPiece, board.getPieceAt(i, fromFile), i == toRank)) {
-						return true;
-					}
+			return 0;
+		} else {
+			for (int i = fromRank - 1; i >= toRank; i--) {
+				if (is_piece_blocking(fromPiece, chess_get_piece_at(i, fromFile, board), i == toRank)) {
+					return 1;
 				}
-				return false;
-			} else {
-				for (int i = fromRank - 1; i >= toRank; i--) {
-					if (isPieceBlocking(fromPiece, board.getPieceAt(i, fromFile), i == toRank)) {
-						return true;
-					}
-				}
-				return false;
 			}
-		} else if (fromRank == toRank) {
+			return 0;
+		}
+	} else if (fromRank == toRank) {
 
-			if (toFile > fromFile) {
-				for (int i = fromFile + 1; i <= toFile; i++) {
-					if (isPieceBlocking(fromPiece, board.getPieceAt(fromRank, i), i == toFile)) {
-						return true;
-					}
+		if (toFile > fromFile) {
+			for (int i = fromFile + 1; i <= toFile; i++) {
+				if (is_piece_blocking(fromPiece, chess_get_piece_at(fromRank, i, board), i == toFile)) {
+					return 1;
 				}
-				return false;
-			} else {
-				for (int i = fromFile - 1; i >= toFile; i--) {
-					if (isPieceBlocking(fromPiece, board.getPieceAt(fromRank, i), i == toFile)) {
-						return true;
-					}
-				}
-				return false;
 			}
+			return 0;
+		} else {
+			for (int i = fromFile - 1; i >= toFile; i--) {
+				if (is_piece_blocking(fromPiece, chess_get_piece_at(fromRank, i, board), i == toFile)) {
+					return 1;
+				}
+			}
+			return 0;
+		}
 
-			// check if we are moving on the bottom left to top right axis
+		// check if we are moving on the bottom left to top right axis
 		} else if (toRank - fromRank == toFile - fromFile) {
-			if (toFile > fromFile) {
-				int[] pos = new int[] { fromRank, fromFile };
-				while (pos[0] != toRank && pos[1] != toFile) {
-					moveRight(pos);
-					moveUp(pos);
-					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
-						return true;
-					}
+		if (toFile > fromFile) {
+			int pos[2] = { fromRank, fromFile };
+			while (pos[0] != toRank && pos[1] != toFile) {
+				move_right(pos);
+				move_up(pos);
+				if (is_valid_board_position(pos[0], pos[1]) && is_piece_blocking(fromPiece, chess_get_piece_at(pos[0], pos[1], board), pos[1] == toFile)) {
+					return 1;
 				}
-				return false;
-			} else {
-				int[] pos = new int[] { fromRank, fromFile };
-				while (pos[0] != toRank && pos[1] != toFile) {
-					moveLeft(pos);
-					moveDown(pos);
-					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
-						return true;
-					}
-				}
-				return false;
 			}
-			/*
-			 * if (toRank > fromRank) { for (int i = fromRank + 1; i <= toRank; i++) { if
-			 * (isPieceBlocking(fromPiece, board.getPieceAt(i, i - fromRank - 1 + fromFile),
-			 * i == toRank)) { return true; } } return false; } else { for (int i = fromRank
-			 * - 1; i >= toRank; i--) { if (isPieceBlocking(fromPiece, board.getPieceAt(i, i
-			 * - fromRank - 1 + toFile), i == toRank)) { return true; } } return false; }
-			 */
-
-			// check if we are moving on the top left to bottom right axis
-		} else if (toRank - fromRank == -(toFile - fromFile)) {
-			if (toFile > fromFile) {
-				int[] pos = new int[] { fromRank, fromFile };
-				while (pos[0] != toRank && pos[1] != toFile) {
-					moveLeft(pos);
-					moveUp(pos);
-					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
-						return true;
-					}
+			return 0;
+		} else {
+			int pos[2] = { fromRank, fromFile };
+			while (pos[0] != toRank && pos[1] != toFile) {
+				move_left(pos);
+				move_down(pos);
+				if (is_valid_board_position(pos[0], pos[1]) && is_piece_blocking(fromPiece, chess_get_piece_at(pos[0], pos[1], board), pos[1] == toFile)) {
+					return 1;
 				}
-				return false;
-			} else {
-				int[] pos = new int[] { fromRank, fromFile };
-				while (pos[0] != toRank && pos[1] != toFile) {
-					
-					moveRight(pos);
-					moveDown(pos);
-					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
-						return true;
-					}
-				}
-				return false;
 			}
-			/*
-			 * if (toRank > fromRank) { for (int i = fromRank + 1; i <= toRank; i++) { if
-			 * (isPieceBlocking(fromPiece, board.getPieceAt(i, i - fromRank - 1 + toFile), i
-			 * == toRank)) { return true; } } return false; } else { for (int i = fromRank -
-			 * 1; i >= toRank; i--) { if (isPieceBlocking(fromPiece, board.getPieceAt(i, i -
-			 * fromRank - 1 + fromFile), i == toRank)) { return true; } } return false; }
-			 * 
-			 */}
+			return 0;
+		}
 
-		return true;
+		// check if we are moving on the top left to bottom right axis
+	} else if (toRank - fromRank == -(toFile - fromFile)) {
+		if (toFile > fromFile) {
+			int pos[2] = { fromRank, fromFile };
+			while (pos[0] != toRank && pos[1] != toFile) {
+				move_left(pos);
+				move_up(pos);
+				if (is_valid_board_position(pos[0], pos[1]) && is_piece_blocking(fromPiece, chess_get_piece_at(pos[0], pos[1], board), pos[1] == toFile)) {
+					return 1;
+				}
+			}
+			return 0;
+		} else {
+			int pos[2] = { fromRank, fromFile };
+			while (pos[0] != toRank && pos[1] != toFile) {
+				move_right(pos);
+				move_down(pos);
+				if (is_valid_board_position(pos[0], pos[1]) && is_piece_blocking(fromPiece, chess_get_piece_at(pos[0], pos[1], board), pos[1] == toFile)) {
+					return 1;
+				}
+			}
+			return 0;
+		}
+	}
+	return 1;
 
 }
 
-int pawn_is_valid_move(piece_t fromPiece, int fromRank, int fromFile, piece_ toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
+int pawn_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
 
 	color_t color = fromPiece->color;
 	if (toRank - fromRank == (color == WHITE ? 2 : -2) && firstMove && toFile - fromFile == 0) {
@@ -168,4 +240,18 @@ int pawn_is_valid_move(piece_t fromPiece, int fromRank, int fromFile, piece_ toP
 		}
 	}
 
+
 }
+
+int rook_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
+int knight_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
+int bishop_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
+int queen_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
+int king_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
+int pawn_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
+int rook_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
+int knight_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
+int bishop_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
+int queen_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
+int king_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
+

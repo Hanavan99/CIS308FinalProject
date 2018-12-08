@@ -42,28 +42,29 @@ typedef struct {
 } chessboard_t;
 
 chessboard_t * chess_create_default_chessboard();
-void chess_move_piece(chessboard_t *, int, int, int, int);
-piece_t * chess_get_piece_at(chessboard_t *, int, int);
+void chess_move_piece(int, int, int, int, chessboard_t *);
+piece_t * chess_get_piece_at(int, int, chessboard_t *);
 int chess_to_rank_index(int);
 int chess_to_file_index(int);
-char chess_get_piece_char(piece_t);
+char chess_get_piece_char(piece_t *);
 color_t chess_get_tile_color(int, int);
 piece_t * chess_create_piece(type_t, color_t);
-int chess_piece_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
-int chess_piece_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
+int chess_piece_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
+int chess_piece_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
+int chess_can_piece_move_to(int, int, int, int, chessboard_t *);
 
 // chess piece move filters
-int pawn_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
-int pawn_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
-int rook_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
-int rook_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
-int knight_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
-int knight_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
-int bishop_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
-int bishop_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
-int queen_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
-int queen_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
-int king_is_valid_move(piece_t, int, int, piece_t, int, int, int, chessboard_t *);
-int king_is_piece_blocked(piece_t, int, int, piece_t, int, int, chessboard_t *);
+int pawn_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
+int pawn_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
+int rook_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
+int rook_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
+int knight_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
+int knight_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
+int bishop_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
+int bishop_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
+int queen_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
+int queen_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
+int king_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
+int king_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
 
 #endif
