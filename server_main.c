@@ -19,7 +19,7 @@ void main(int argc, int* argv) {
 	serversocket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	int opt = 1;
 	setsockopt(serversocket_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
-	
+
 	struct sockaddr_in address;
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
@@ -35,6 +35,12 @@ void main(int argc, int* argv) {
 	struct socklen_t * len;
 	printf("Server waiting for client 1\n");
 	teama_fd = accept(serversocket_fd, addr, len);
+
+	//char * data = malloc(sizeof(chessboard_t));
+	//for (int i = 0; i < sizeof(chessboard_t); i++) {
+	//	*(data + i) = (char) *(board + i);
+	//}
+	send(teama_fd, (char *) board, sizeof(chessboard_t), 0);
 
 	printf("Server waiting for client 2\n");
 	teamb_fd = accept(serversocket_fd, addr, len);

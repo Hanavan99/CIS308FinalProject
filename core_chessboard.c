@@ -41,3 +41,26 @@ piece_t * chess_create_piece(type_t type, color_t color) {
     piece->color = color;
     return piece;
 }
+
+int is_valid_move(piece_t fromPiece, int fromRank, int fromFile, piece_t toPiece, int toRank, int toFile, chessboard_t * board) {
+
+	return 0;
+
+}
+
+int pawn_is_valid_move(piece_t fromPiece, int fromRank, int fromFile, piece_ toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
+
+	color_t color = fromPiece->color;
+	if (toRank - fromRank == (color == WHITE ? 2 : -2) && firstMove && toFile - fromFile == 0) {
+		return toPiece == NULL;
+	} else if (toRank - fromRank == (color == WHITE ? 1 : -1)) {
+		if (toFile - fromFile == 0) {
+			return toPiece == NULL;
+		} else if (toFile - fromFile == 1 || toFile - fromFile == -1) {
+			if (toPiece != NULL) {
+				return toPiece->color != fromPiece->color;
+			}
+		}
+	}
+
+}
