@@ -248,6 +248,7 @@ int knight_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_
 int bishop_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
 int queen_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
 int king_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
+
 int pawn_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
 int rook_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
 int knight_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
