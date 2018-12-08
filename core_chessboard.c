@@ -44,7 +44,112 @@ piece_t * chess_create_piece(type_t type, color_t color) {
 
 int is_valid_move(piece_t fromPiece, int fromRank, int fromFile, piece_t toPiece, int toRank, int toFile, chessboard_t * board) {
 
-	return 0;
+	// check if the piece is moving vertically
+		if (fromFile == toFile) {
+
+			// check if the piece is moving nowhere
+			if (fromRank == toRank) {
+				return true;
+			}
+
+			if (toRank > fromRank) {
+				for (int i = fromRank + 1; i <= toRank; i++) {
+					if (isPieceBlocking(fromPiece, board.getPieceAt(i, fromFile), i == toRank)) {
+						return true;
+					}
+				}
+				return false;
+			} else {
+				for (int i = fromRank - 1; i >= toRank; i--) {
+					if (isPieceBlocking(fromPiece, board.getPieceAt(i, fromFile), i == toRank)) {
+						return true;
+					}
+				}
+				return false;
+			}
+		} else if (fromRank == toRank) {
+
+			if (toFile > fromFile) {
+				for (int i = fromFile + 1; i <= toFile; i++) {
+					if (isPieceBlocking(fromPiece, board.getPieceAt(fromRank, i), i == toFile)) {
+						return true;
+					}
+				}
+				return false;
+			} else {
+				for (int i = fromFile - 1; i >= toFile; i--) {
+					if (isPieceBlocking(fromPiece, board.getPieceAt(fromRank, i), i == toFile)) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			// check if we are moving on the bottom left to top right axis
+		} else if (toRank - fromRank == toFile - fromFile) {
+			if (toFile > fromFile) {
+				int[] pos = new int[] { fromRank, fromFile };
+				while (pos[0] != toRank && pos[1] != toFile) {
+					moveRight(pos);
+					moveUp(pos);
+					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
+						return true;
+					}
+				}
+				return false;
+			} else {
+				int[] pos = new int[] { fromRank, fromFile };
+				while (pos[0] != toRank && pos[1] != toFile) {
+					moveLeft(pos);
+					moveDown(pos);
+					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
+						return true;
+					}
+				}
+				return false;
+			}
+			/*
+			 * if (toRank > fromRank) { for (int i = fromRank + 1; i <= toRank; i++) { if
+			 * (isPieceBlocking(fromPiece, board.getPieceAt(i, i - fromRank - 1 + fromFile),
+			 * i == toRank)) { return true; } } return false; } else { for (int i = fromRank
+			 * - 1; i >= toRank; i--) { if (isPieceBlocking(fromPiece, board.getPieceAt(i, i
+			 * - fromRank - 1 + toFile), i == toRank)) { return true; } } return false; }
+			 */
+
+			// check if we are moving on the top left to bottom right axis
+		} else if (toRank - fromRank == -(toFile - fromFile)) {
+			if (toFile > fromFile) {
+				int[] pos = new int[] { fromRank, fromFile };
+				while (pos[0] != toRank && pos[1] != toFile) {
+					moveLeft(pos);
+					moveUp(pos);
+					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
+						return true;
+					}
+				}
+				return false;
+			} else {
+				int[] pos = new int[] { fromRank, fromFile };
+				while (pos[0] != toRank && pos[1] != toFile) {
+					
+					moveRight(pos);
+					moveDown(pos);
+					if (board.isValidBoardPosition(pos[0], pos[1]) && isPieceBlocking(fromPiece, board.getPieceAt(pos[0], pos[1]), pos[1] == toFile)) {
+						return true;
+					}
+				}
+				return false;
+			}
+			/*
+			 * if (toRank > fromRank) { for (int i = fromRank + 1; i <= toRank; i++) { if
+			 * (isPieceBlocking(fromPiece, board.getPieceAt(i, i - fromRank - 1 + toFile), i
+			 * == toRank)) { return true; } } return false; } else { for (int i = fromRank -
+			 * 1; i >= toRank; i--) { if (isPieceBlocking(fromPiece, board.getPieceAt(i, i -
+			 * fromRank - 1 + fromFile), i == toRank)) { return true; } } return false; }
+			 * 
+			 */}
+
+		return true;
 
 }
 
