@@ -63,8 +63,7 @@ int check_move(char input [], char output []){
     return 1;
 }
 
-void display_board(){
-    chessboard_t * board = chess_create_default_chessboard();
+void display_board(chessboard_t * board){
 
     printf("\033[40m\033[37m");
     printf("_|a b c d e f g h\n");
@@ -83,7 +82,7 @@ void display_board(){
 		    printf("\033[44m");
 		}
 
-		piece_t * piece = board->pieces[8-y][x-1];
+		piece_t * piece = board->pieces[y-1][x-1];
 		if(piece == NULL) { printf("  "); continue; }
 
 		switch(piece->type){
