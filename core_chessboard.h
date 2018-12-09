@@ -52,6 +52,7 @@ piece_t * chess_create_piece(type_t, color_t);
 int chess_piece_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);
 int chess_piece_is_piece_blocked(piece_t *, int, int, piece_t *, int, int, chessboard_t *);
 int chess_can_piece_move_to(int, int, int, int, chessboard_t *);
+int is_valid_board_position(int, int);
 
 // chess piece move filters
 int pawn_is_valid_move(piece_t *, int, int, piece_t *, int, int, int, chessboard_t *);

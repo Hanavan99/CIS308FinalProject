@@ -18,9 +18,9 @@ chessboard_t * board;
 void main(int argc, int* argv) {
 
 	board = chess_create_default_chessboard();
-	board->pieces[4][4] = chess_create_piece(KING, WHITE);
+	//board->pieces[4][4] = chess_create_piece(KING, WHITE);
 
-	printf("[6][4] = %d\n", board->pieces[6][4]->type);
+	//printf("[6][4] = %d\n", board->pieces[6][4]->type);
 
 	printf("Server initializing\n");
 	serversocket_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -78,11 +78,17 @@ void main(int argc, int* argv) {
 			int toRank = (int) (move[3] - '1') + 1;
 
 			printf("Player's move: %c%c to %c%c\n", move[0], move[1], move[2], move[3]);
-			printf("DEBUG: fromRank = %d, fromFile = %d, toRank = %d, toFile = %d\n", fromRank, fromFile, toRank, toFile);
 
-			validmove = chess_move_piece(fromRank, fromFile, toRank, toFile, board);
+			if (is_valid_board_position(fromRank, fromFile) && is_valid_board_position(toRank, toFile)) {
 
-			printf("Player's move was %s.\n", validmove ? "valid" : "invalid");
+				//printf("DEBUG: fromRank = %d, fromFile = %d, toRank = %d, toFile = %d\n", fromRank, fromFile, toRank, toFile);
+
+				validmove = chess_move_piece(fromRank, fromFile, toRank, toFile, board);
+
+				printf("Player's move was %s.\n", validmove ? "valid" : "invalid");
+			} else {
+				printf("Invalid move input\n");
+			}
 
 			core_write_board(socket, board);
 
