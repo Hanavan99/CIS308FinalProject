@@ -71,7 +71,7 @@ void display_board(chessboard_t * board){
     for(int y = 8; y > 0; y--){
 	for(int x = 0; x < 9; x++){
 	    if(x == 0){
-		printf("%d|", y);
+		printf("%d|\n", y);
 	    }
 	    else{
 
@@ -83,10 +83,15 @@ void display_board(chessboard_t * board){
 		}
 
 		piece_t * piece = board->pieces[y-1][x-1];
-		if(piece == NULL) { printf("  "); continue; }
+printf("got the board piece\n");
+		if(piece == NULL) {
+		    printf("  ");
+		    continue;
+		}
 
 		switch(piece->type){
 		    case KING:
+printf("king swithc\n");
 		    if(piece->color == WHITE){
 		        printf("\u2654 ");
 		    }
@@ -107,6 +112,7 @@ void display_board(chessboard_t * board){
 		    break;
 
 		    case ROOK:
+printf("rook switch\n");
 		    if(piece->color == WHITE){
 		    	printf("\u2656 ");
 		    }
