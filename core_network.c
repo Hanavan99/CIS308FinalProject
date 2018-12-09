@@ -74,12 +74,27 @@ void core_write_board(int socket, chessboard_t * board) {
 	}
 }
 
+void core_read_move(int socket, char * move) {
+	if (move != NULL) {
+		read(socket, move, sizeof(char) * 4);
+	}
+}
+
 /*
  *  Writes the board to the provided socket.
  */
-void core_write_moves(int socket, char source_move[], char target_move[]) {
-    if (source_move != NULL && target_move != NULL) {
-	char sned [] = {source_move[0], source_move[1], target_move[0], target_move[1]};
-        send(socket, sned, sizeof(char) * 4, 0);
+void core_write_move(int socket, char * move) {
+    if (move != NULL) {
+        send(socket, move, sizeof(char) * 4, 0);
     }
+}
+
+void core_read_player_color(int socket, color_t * color) {
+	read(socket, color, sizeof(color_t));
+}
+
+void core_write_player_color(int socket, color_t * color) {
+	if (color != NULL) {
+		send(socket, color, sizeof(color_t), 0);
+	}
 }
