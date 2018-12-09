@@ -130,7 +130,7 @@ int chess_can_piece_move_to(int fromRank, int fromFile, int toRank, int toFile, 
 	return !blocked && validMove;
 }
 
-int is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
+int is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
 
 	// check if the piece is moving vertically
 	if (fromFile == toFile) {
@@ -243,16 +243,79 @@ int pawn_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t 
 
 }
 
-int rook_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
-int knight_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
-int bishop_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
-int queen_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
-int king_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) { return 0; }
+int rook_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
+	if (fromRank == toRank && fromFile != toFile) {
+		return 1;
+	} else if (fromFile == toFile && fromRank != toRank) {
+		return 1;
+	}
+	return 0;
+}
 
-int pawn_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
-int rook_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
-int knight_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
-int bishop_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
-int queen_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
-int king_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) { return 1; }
+int knight_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
+	int drank = toRank - fromRank;
+	int dfile = toFile - fromFile;
+	if (((drank == 2 || drank == -2) && (dfile == 1 || dfile == -1)) || ((drank == 1 || drank == -1) && (dfile == 2 || dfile == -2))) {
+		return 1;
+	}
+	return 0;
+}
+
+int bishop_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
+	if (toRank - fromRank == toFile - fromFile) {
+		return 1;
+	} else if (toRank - fromRank == -(toFile - fromFile)) {
+		return 1;
+	}
+	return 0;
+}
+
+int queen_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
+	if (fromRank == toRank && fromFile != toFile) {
+		return 1;
+	} else if (fromFile == toFile && fromRank != toRank) {
+		return 1;
+	} else if (toRank - fromRank == toFile - fromFile) {
+		return 1;
+	} else if (toRank - fromRank == -(toFile - fromFile)) {
+		return 1;
+	}
+	return 0;
+}
+int king_is_valid_move(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, int firstMove, chessboard_t * board) {
+	if ((toRank - fromRank == 1 || toRank - fromRank == -1) && (toFile - fromFile == 1 || toFile - fromFile == -1)) {
+		return 1;
+	} else if ((toRank - fromRank == 1 || toRank - fromRank == -1) && toFile - fromFile == 0) {
+		return 1;
+	} else if ((toFile - fromFile == 1 || toFile - fromFile == -1) && toRank - fromRank == 0) {
+		return 1;
+	}
+	return 0;
+}
+
+
+
+int pawn_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
+	return is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+}
+
+int rook_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
+	return is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+}
+
+int knight_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
+	return toPiece != NULL ? toPiece->color == fromPiece->color : 0;
+}
+
+int bishop_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
+	return is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+}
+
+int queen_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
+	return is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+}
+
+int king_is_piece_blocked(piece_t * fromPiece, int fromRank, int fromFile, piece_t * toPiece, int toRank, int toFile, chessboard_t * board) {
+	return is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
+}
 
