@@ -15,6 +15,7 @@ void main(int argc, const char* argv[]) {
   //  }
     //printf("\n");
 while(1){
+    printf("\033[H\033[J");
     core_read_board(socket, board);
     display_board(board, * color);
 if(board->turncolor == * color){

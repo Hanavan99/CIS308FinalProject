@@ -4,7 +4,7 @@
 #include"core_chessboard.h"
 #include"client_ui.h"
 
-char input[3];
+char input[100];
 char source_move[3];
 char target_move[3];
 
@@ -70,7 +70,7 @@ int check_move(char input [], char output []){
 
 void display_board(chessboard_t * board, color_t color){
 //printf("%ld\n", sizeof(chessboard_t));
-    printf("\033[40m\033[37m");
+    printf("\033[00m\033[37m");
     if(color == WHITE) { printf("_|a b c d e f g h\n"); }
     else{ printf("_|h g f e d c b a\n"); }
 
@@ -164,6 +164,6 @@ void display_board(chessboard_t * board, color_t color){
 		}
 	    }
 	}//end x for
-	printf("\033[40m\033[37m\n");
+	printf("\033[00m\033[37m\n");
     }
 }
