@@ -13,15 +13,15 @@ int core_create_client_socket(char * addr, int port){
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     int opt = 1;
     int one = setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt));
-printf("%d\n", one);
+//printf("%d\n", one);
     struct sockaddr_in address;
     address.sin_family = AF_INET;
     //address.sin_addr.s_addr = "129.130.10.39";
     address.sin_port = htons(port);
     int two = inet_pton(AF_INET, addr, &address.sin_addr);
-printf("%d\n", two);
+//printf("%d\n", two);
     int three = connect(sockfd, (struct sockaddr *) &address, sizeof(address));
-printf("%s\n", strerror(errno));
+//printf("%s\n", strerror(errno));
 
     return sockfd;
 }
@@ -36,9 +36,9 @@ void core_read_board(int socket, chessboard_t * board) {
 	board->turncolor = (color_t)data[0];
 
 	for(int i = 0; i < CHESSBOARD_SIZE * CHESSBOARD_SIZE; i++){
-printf("%d\n", i);
+//printf("%d\n", i);
 	    if((int)data[(i*2+1)] != -1){
-printf("first if\n");
+//printf("first if\n");
 		board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE] = malloc(sizeof(piece_t));
 		board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE]->type = (type_t)data[i*2+1];
 		board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE]->color = (color_t)data[i*2+2];

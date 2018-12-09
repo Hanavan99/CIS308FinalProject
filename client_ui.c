@@ -8,7 +8,7 @@ char input[3];
 char source_move[3];
 char target_move[3];
 
-void get_move(){
+void get_move(char move []){
     int flag = 0;
 
     do{
@@ -25,6 +25,11 @@ void get_move(){
     printf("\n");
     flag = check_move(input, target_move);
     } while(flag == 0);
+
+    move[0] = source_move[0];
+    move[1] = source_move[1];
+    move[2] = target_move[0];
+    move[3] = target_move[1];
 }
 
 int check_move(char input [], char output []){
@@ -64,14 +69,16 @@ int check_move(char input [], char output []){
 }
 
 void display_board(chessboard_t * board, color_t color){
-printf("%ld\n", sizeof(chessboard_t));
+//printf("%ld\n", sizeof(chessboard_t));
     printf("\033[40m\033[37m");
-    printf("_|a b c d e f g h\n");
+    if(color == WHITE) { printf("_|a b c d e f g h\n"); }
+    else{ printf("_|h g f e d c b a\n"); }
 
     for(int y = 8; y > 0; y--){
 	for(int x = 0; x < 9; x++){
 	    if(x == 0){
-		printf("%d|", y);
+		if(color == WHITE) { printf("%d|", y); }
+		else{ printf("%d|", (8-y)+1); }
 	    }
 	    else{
 
@@ -159,6 +166,4 @@ printf("%ld\n", sizeof(chessboard_t));
 	}//end x for
 	printf("\033[40m\033[37m\n");
     }
-
-//get_move();
 }
