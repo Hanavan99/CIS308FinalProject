@@ -8,14 +8,19 @@
 #include <string.h>
 #include <errno.h>
 
-#define PORT 12345
-
 int serversocket_fd = 0;
 int teama_fd = 0;
 int teamb_fd = 0;
 chessboard_t * board;
 
-void main(int argc, int* argv) {
+void main(int argc, char ** argv) {
+
+	if (argc != 2) {
+		printf("Invalid number of arguments. Usage: ./server [port]\n");
+		return;
+	}
+
+	int port = atoi(argv[1]);
 
 	board = chess_create_default_chessboard();
 	//board->pieces[4][4] = chess_create_piece(KING, WHITE);
@@ -30,10 +35,10 @@ void main(int argc, int* argv) {
 	struct sockaddr_in address;
 	address.sin_family = AF_INET;
 	address.sin_addr.s_addr = INADDR_ANY;
-	address.sin_port = htons(PORT);
+	address.sin_port = htons(port);
 	int addrlen = sizeof(address);
 
-	printf("Binding to address\n");
+	printf("Binding to address (port %d)\n", port);
 	bind(serversocket_fd, (struct sockaddr *) &address, sizeof(address));
 
 	printf("Server going into listen mode\n");
