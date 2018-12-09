@@ -9,10 +9,10 @@ void main(int argc, const char* argv[]) {
     core_read_board(socket, board);
     char * name = (char *)board;
     for(int i = 0; i < sizeof(chessboard_t); i++){
-	printf("%c", name[i]);
+	printf("%d -> %d\n", i, (int)*(((char *) board) + i));
     }
     printf("\n");
 
-    display_board(board);
+    display_board(board, WHITE);
     get_move();
 }

@@ -63,15 +63,15 @@ int check_move(char input [], char output []){
     return 1;
 }
 
-void display_board(chessboard_t * board){
-
+void display_board(chessboard_t * board, color_t color){
+printf("%ld\n", sizeof(chessboard_t));
     printf("\033[40m\033[37m");
     printf("_|a b c d e f g h\n");
 
     for(int y = 8; y > 0; y--){
 	for(int x = 0; x < 9; x++){
 	    if(x == 0){
-		printf("%d|\n", y);
+		printf("%d|", y);
 	    }
 	    else{
 
@@ -82,72 +82,72 @@ void display_board(chessboard_t * board){
 		    printf("\033[44m");
 		}
 
-		piece_t * piece = board->pieces[y-1][x-1];
-printf("got the board piece\n");
+		piece_t * piece = board->pieces[color == WHITE ? 8-y : y-1][color == WHITE ? x-1 : 8-x];
+//printf("got the board piece\n");
 		if(piece == NULL) {
 		    printf("  ");
 		    continue;
 		}
-
+//printf("%d\n", piece->type);
 		switch(piece->type){
 		    case KING:
-printf("king swithc\n");
+//printf("king swithc\n");
 		    if(piece->color == WHITE){
-		        printf("\u2654 ");
+		        printf("\033[37m\u2654 ");
 		    }
 		    else{
-			printf("\u265A ");
+			printf("\033[30m\u265A ");
 		    }
     		    //printf("K ");
 		    break;
 
 		    case QUEEN:
 		    if(piece->color == WHITE){
-			printf("\u2655 ");
+			printf("\033[37m\u2655 ");
 		    }
 		    else{
-			printf("\u265B ");
+			printf("\033[30m\u265B ");
 		    }
 		    //printf("Q ");
 		    break;
 
 		    case ROOK:
-printf("rook switch\n");
+//printf("rook switch\n");
 		    if(piece->color == WHITE){
-		    	printf("\u2656 ");
+		    	printf("\033[37m\u2656 ");
 		    }
 		    else {
-			printf("\u265C ");
+			printf("\033[30m\u265C ");
 		    }
 		    //printf("B ");
 		    break;
 
 		    case BISHOP:
 		    if(piece->color == WHITE){
-			printf("\u2657 ");
+			printf("\033[37m\u2657 ");
 		    }
 		    else{
-			printf("\u265D ");
+			printf("\033[30m\u265D ");
 		    }
 		    //printf("N ");
 		    break;
 
 		    case KNIGHT:
 		    if(piece->color == WHITE){
-			printf("\u2658 ");
+			printf("\033[37m\u2658 ");
 		    }
 		    else{
-			printf("\u265E ");
+			printf("\033[30m\u265E ");
 		    }
 		    //printf("R ");
 		    break;
 
 		    case PAWN:
 		    if(piece->color == WHITE){
-			printf("\u2659 ");
+			printf("\033[37m\u2659 ");
 		    }
 		    else{
-			printf("\u265F ");
+			printf("\033[30m\u265F ");
 		    }
 		    //printf("P ");
 		    break;

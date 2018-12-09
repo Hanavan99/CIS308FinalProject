@@ -31,7 +31,23 @@ printf("%s\n", strerror(errno));
  */
 void core_read_board(int socket, chessboard_t * board) {
     if (board != NULL) {
-        read(socket, (char *)board, sizeof(chessboard_t));
+	char data [CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1];
+        read(socket, data, CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1);
+	board->turncolor = (color_t)data[0];
+
+	for(int i = 0; i < CHESSBOARD_SIZE * CHESSBOARD_SIZE; i++){
+printf("%d\n", i);
+	    if((int)data[(i*2+1)] != -1){
+printf("first if\n");
+		board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE] = malloc(sizeof(piece_t));
+		board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE]->type = (type_t)data[i*2+1];
+		board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE]->color = (color_t)data[i*2+2];
+	    }
+	    else{
+		board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE] = NULL;
+	    }
+
+	}
    }
 }
 
