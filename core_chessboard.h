@@ -42,7 +42,7 @@ typedef struct {
 } chessboard_t;
 
 chessboard_t * chess_create_default_chessboard();
-void chess_move_piece(int, int, int, int, chessboard_t *);
+int chess_move_piece(int, int, int, int, chessboard_t *);
 piece_t * chess_get_piece_at(int, int, chessboard_t *);
 int chess_to_rank_index(int);
 int chess_to_file_index(int);

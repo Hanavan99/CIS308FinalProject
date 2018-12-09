@@ -66,11 +66,11 @@ void core_write_board(int socket, chessboard_t * board) {
 				data[i * 2 + 1] = -1;
 				data[i * 2 + 2] = -1;
 			}
-			printf("byte %d: %d, %d (index [%d][%d])\n", i * 2 + 1, (int) data[i * 2 + 1], (int) data[i * 2 + 2], i / CHESSBOARD_SIZE, i % CHESSBOARD_SIZE);
+//			printf("byte %d: %d, %d (index [%d][%d])\n", i * 2 + 1, (int) data[i * 2 + 1], (int) data[i * 2 + 2], i / CHESSBOARD_SIZE, i % CHESSBOARD_SIZE);
 		}
-		printf("Made it\n");
+//		printf("Made it\n");
 		int sent = send(socket, data, CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1, 0);
-		printf("Sending %d bytes out of %d bytes\n", sent, CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1);
+//		printf("Sending %d bytes out of %d bytes\n", sent, CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1);
 	}
 }
 

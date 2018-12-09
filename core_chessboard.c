@@ -19,13 +19,17 @@ chessboard_t * chess_create_default_chessboard() {
 	return board;
 }
 
-void chess_move_piece(int fromRank, int fromFile, int toRank, int toFile, chessboard_t * board) {
+int chess_move_piece(int fromRank, int fromFile, int toRank, int toFile, chessboard_t * board) {
 	piece_t * fromPiece = chess_get_piece_at(fromRank, fromFile, board);
+
 	if (fromPiece != NULL && chess_can_piece_move_to(fromRank, fromFile, toRank, toFile, board)) {
+
 		board->pieces[chess_to_rank_index(toRank)][chess_to_file_index(toFile)] = fromPiece;
 		board->pieces[chess_to_rank_index(fromRank)][chess_to_file_index(fromFile)] = NULL;
 		board->turncolor = board->turncolor == WHITE ? BLACK : WHITE;
+		return 1;
 	}
+	return 0;
 }
 
 int chess_to_rank_index(int rank) {
@@ -81,7 +85,7 @@ int is_valid_board_position(int rank, int file) {
 
 int chess_can_piece_move_to(int fromRank, int fromFile, int toRank, int toFile, chessboard_t * board) {
 	piece_t * fromPiece = chess_get_piece_at(fromRank, fromFile, board);
-	piece_t * toPiece = chess_get_piece_at(fromRank, fromFile, board);
+	piece_t * toPiece = chess_get_piece_at(toRank, toFile, board);
 	int firstMove = 1; // TODO make a function for this
 
 	int validMove = 0;
@@ -127,6 +131,7 @@ int chess_can_piece_move_to(int fromRank, int fromFile, int toRank, int toFile, 
 		blocked = king_is_piece_blocked(fromPiece, fromRank, fromFile, toPiece, toRank, toFile, board);
 		break;
 	}
+
 	return !blocked && validMove;
 }
 

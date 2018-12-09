@@ -20,6 +20,8 @@ void main(int argc, int* argv) {
 	board = chess_create_default_chessboard();
 	board->pieces[4][4] = chess_create_piece(KING, WHITE);
 
+	printf("[6][4] = %d\n", board->pieces[6][4]->type);
+
 	printf("Server initializing\n");
 	serversocket_fd = socket(AF_INET, SOCK_STREAM, 0);
 	int opt = 1;
@@ -37,23 +39,65 @@ void main(int argc, int* argv) {
 	printf("Server going into listen mode\n");
 	listen(serversocket_fd, 2);
 
+	color_t * teama_color = malloc(sizeof(color_t));
+	color_t * teamb_color = malloc(sizeof(color_t));
+	*teama_color = WHITE;
+	*teamb_color = BLACK;
+
 	struct sockaddr * addr;
 	struct socklen_t * len;
 	printf("Server waiting for client 1\n");
-	printf(strerror(errno));
 	teama_fd = accept(serversocket_fd, (struct sockaddr *) &address, (socklen_t *) &addrlen);
-	printf(strerror(errno));
+	printf(" --> Socket status: %s\n", strerror(errno));
 
+	core_write_player_color(teama_fd, teama_color);
 	core_write_board(teama_fd, board);
 
 	printf("Server waiting for client 2\n");
 	teamb_fd = accept(serversocket_fd, (struct sockaddr *) &address, (socklen_t *) &addrlen);
+	printf(" --> Socket status: %s\n", strerror(errno));
 
-	core_write_board(teama_fd, board);
+	core_write_player_color(teamb_fd, teamb_color);
+	core_write_board(teamb_fd, board);
+	printf("Starting game\n");
+
+	int validmove = 0;
+	int socket = teama_fd;
+	char move[4];
 
 	while (1) {
 
-		
+		printf("Currently %s's turn\n", board->turncolor == WHITE ? "white" : "black");
+
+		while (!validmove) {
+
+			core_read_move(socket, move);
+			int fromFile = (int) (move[0] - 'a') + 1; // e2 == [4][6], e3 == [4][5]
+			int fromRank = (int) (move[1] - '1') + 1;
+			int toFile = (int) (move[2] - 'a') + 1;
+			int toRank = (int) (move[3] - '1') + 1;
+
+			printf("Player's move: %c%c to %c%c\n", move[0], move[1], move[2], move[3]);
+			printf("DEBUG: fromRank = %d, fromFile = %d, toRank = %d, toFile = %d\n", fromRank, fromFile, toRank, toFile);
+
+			validmove = chess_move_piece(fromRank, fromFile, toRank, toFile, board);
+
+			printf("Player's move was %s.\n", validmove ? "valid" : "invalid");
+
+			core_write_board(socket, board);
+
+		}
+
+
+		printf("Player finished turn. Switching color.\n");
+
+		// switch player
+		//board->teamcolor = board->teamcolor == WHITE ? BLACK : WHITE;
+		socket = board->turncolor == WHITE ? teama_fd : teamb_fd;
+		validmove = 0;
+
+		// write board to other player
+		core_write_board(socket, board);
 
 	}
 
