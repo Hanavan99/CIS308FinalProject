@@ -31,12 +31,12 @@ typedef enum {
     KING
 } type_t;
 
-typedef struct __attribute__((__packed__)) piece_t {
+typedef struct piece_t {
     type_t type;
     color_t color;
 } piece_t;
 
-typedef struct __attribute__((__packed__)) {
+typedef struct {
     color_t turncolor;
     piece_t * pieces[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
 } chessboard_t;

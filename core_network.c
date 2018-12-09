@@ -35,6 +35,29 @@ void core_read_board(int socket, chessboard_t * board) {
    }
 }
 
+void core_write_board(int socket, chessboard_t * board) {
+	if (board != NULL) {
+		char data[CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1];
+//		printf("size %d\n", CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1);
+		data[0] = (char) board->turncolor;
+		for (int i = 0; i < CHESSBOARD_SIZE * CHESSBOARD_SIZE; i++) {
+			//printf("%d %d -> ", i / CHESSBOARD_SIZE, i % CHESSBOARD_SIZE);
+			piece_t * piece = board->pieces[i / CHESSBOARD_SIZE][i % CHESSBOARD_SIZE];
+			if (piece != NULL) {
+				data[i * 2 + 1] = (char) piece->type;
+				data[i * 2 + 2] = (char) piece->color;
+			} else {
+				data[i * 2 + 1] = -1;
+				data[i * 2 + 2] = -1;
+			}
+			printf("byte %d: %d, %d (index [%d][%d])\n", i * 2 + 1, (int) data[i * 2 + 1], (int) data[i * 2 + 2], i / CHESSBOARD_SIZE, i % CHESSBOARD_SIZE);
+		}
+		printf("Made it\n");
+		int sent = send(socket, data, CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1, 0);
+		printf("Sending %d bytes out of %d bytes\n", sent, CHESSBOARD_SIZE * CHESSBOARD_SIZE * 2 + 1);
+	}
+}
+
 /*
  *  Writes the board to the provided socket.
  */

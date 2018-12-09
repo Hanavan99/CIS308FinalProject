@@ -1,4 +1,5 @@
 #include "core_chessboard.h"
+#include "core_network.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/socket.h>
@@ -15,6 +16,8 @@ int teamb_fd = 0;
 chessboard_t * board;
 
 void main(int argc, int* argv) {
+	
+	printf("%d\n", sizeof(chessboard_t));
 
 	board = chess_create_default_chessboard();
 
@@ -42,19 +45,20 @@ void main(int argc, int* argv) {
 	teama_fd = accept(serversocket_fd, (struct sockaddr *) &address, (socklen_t *) &addrlen);
 	printf(strerror(errno));
 
-	char * data = malloc(sizeof(chessboard_t));
-	for (int i = 0; i < sizeof(chessboard_t); i++) {
-		printf("%d\n", (int) *(((char *) board) + i));
-		data[i] = (char) *(&board + i);
-	}
+	core_write_board(teama_fd, board);
+//	char * data = malloc(sizeof(chessboard_t));
+//	for (int i = 0; i < sizeof(chessboard_t); i++) {
+//		printf("%d -> %d\n", i, (int) *(((char *) board) + i));
+//		data[i] = (char) *(((char *) board) + i);
+//	}
 	//char * text = "test\n";
 	//int sent = send(teama_fd, text, strlen(text), 0);
 	//printf("Sent %d bytes\n", sent);
 	//if (sent == -1) {
 	//	printf(strerror(errno));
 	//}
-	int sent = send(teama_fd, board, sizeof(chessboard_t), 0);
-	printf("Should send %d bytes and sent %d bytes\n", sizeof(chessboard_t), sent);
+//	int sent = send(teama_fd, data, sizeof(chessboard_t), 0);
+//	printf("Should send %d bytes and sent %d bytes\n", sizeof(chessboard_t), sent);
 
 	printf("Server waiting for client 2\n");
 	teamb_fd = accept(serversocket_fd, addr, len);
