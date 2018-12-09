@@ -81,11 +81,13 @@ void main(int argc, int* argv) {
 
 			if (is_valid_board_position(fromRank, fromFile) && is_valid_board_position(toRank, toFile)) {
 
-				//printf("DEBUG: fromRank = %d, fromFile = %d, toRank = %d, toFile = %d\n", fromRank, fromFile, toRank, toFile);
+				if (chess_get_piece_at(fromRank, fromFile, board) != NULL && chess_get_piece_at(fromRank, fromFile, board)->color == board->turncolor) {
+					validmove = chess_move_piece(fromRank, fromFile, toRank, toFile, board);
+					printf("Player's move was %s.\n", validmove ? "valid" : "invalid");
+				} else {
+					printf("Player tried to move piece that wasn't theirs.\n");
+				}
 
-				validmove = chess_move_piece(fromRank, fromFile, toRank, toFile, board);
-
-				printf("Player's move was %s.\n", validmove ? "valid" : "invalid");
 			} else {
 				printf("Invalid move input\n");
 			}
@@ -98,7 +100,6 @@ void main(int argc, int* argv) {
 		printf("Player finished turn. Switching color.\n");
 
 		// switch player
-		//board->teamcolor = board->teamcolor == WHITE ? BLACK : WHITE;
 		socket = board->turncolor == WHITE ? teama_fd : teamb_fd;
 		validmove = 0;
 
