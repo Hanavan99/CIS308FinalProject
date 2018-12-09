@@ -21,6 +21,9 @@ int core_create_client_socket(char * addr, int port){
     int two = inet_pton(AF_INET, addr, &address.sin_addr);
 //printf("%d\n", two);
     int three = connect(sockfd, (struct sockaddr *) &address, sizeof(address));
+    if(three != 0){
+	return -1;
+    }
 //printf("%s\n", strerror(errno));
 
     return sockfd;
